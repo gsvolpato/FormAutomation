@@ -1,11 +1,68 @@
 # MANUTENCAO
 
+# Columns used in this project:
+# - IDX: OS number in Sonner system
+# - OS: Order Service number
+# - Placa: Vehicle license plate
+# - KM: Vehicle mileage
+# - Tipo Serv: Service type (CORRETIVA or PREVENTIVA)
+# - Item: Item description
+# - Quantidade: Quantity
+# - Valor Unit: Unit value
+# - Categoria Item: Item category (MAO DE OBRA, PECAS, or LUBRIFICANTES)
+# - Mao de Obra: Labor cost
+# - Comentario: Comments
+# - ANOEMPENHO: Budget year
+# - EMPENHO: Budget number
+# - NF: Invoice number
+# - DATANF: Invoice date
+# - Valor Total: Total value (Quantidade * Valor Unit)
+# - Data OS: Order Service date
+# - Status: Order Service status
+# - Fornecedor: Supplier/Provider name
+# - Serie NF: Invoice series
+
 # 1 - Libraries
 import time
 import pandas as pd
 import pyautogui
 import sys
 import keyboard
+
+# Coordinates for all UI elements
+COORDINATES = {
+    # Main tabs
+    "TAB_MAO_DE_OBRA": (348, 327),
+    "TAB_PECAS": (435, 335),
+    "TAB_LUBRIFICANTES": (518, 330),
+    
+    # Form fields
+    "NUMERO_OS": (237, 238),
+    "ITEM_FROTA": (243, 334),
+    "SETA_TIPO": (499, 300),
+    "KM": (771, 336),
+    "AUTORIZADOR": (236, 441),
+    
+    # Fornecedor fields
+    "FORNECEDOR_MAO_OBRA": (554, 379),
+    "FORNECEDOR_PECAS_LUBES": (424, 371),
+    
+    # Discrimination buttons
+    "DISCRIMINACAO_INCLUIR": (930, 599),
+    "DISCRIMINACAO_ACEITAR": (930, 640),
+    "DISCRIMINAR_ITEM": (914, 718),
+    
+    # Item actions
+    "INCLUIR_ITEM": (702, 726),
+    "INCLUIR_OS": (221, 156),
+
+    "NF": (734, 567),
+    "SERIE NF": (804, 564),   
+    "DATA NF": (846, 567),    
+    "ANO EMPENHO": (230, 557),
+    "EMPENHO": (293, 557),    
+    "COMENTARIO": (590, 494)
+}
 
 # Global pause variable
 pause_execution = False
@@ -29,7 +86,7 @@ def check_pause():
         time.sleep(0.1)
 
 # 2 - Load the Excel file into a DataFrame
-df = pd.read_excel('filtered02864324-cleaned.xlsx')
+df = pd.read_excel('Manutencao\Filtered.xlsx')
 
 # 3 - Confirmation Breaks
 def confirm():
@@ -72,70 +129,69 @@ def load_last_os():
 def mao_de_obra(row):
     print("____________________________________________________")
     check_pause() # Check if paused
-    pyautogui.moveTo((348, 327)) # ABA MÃO DE OBRA
-    pyautogui.click((348, 327)) # ABA MÃO DE OBRA
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["TAB_MAO_DE_OBRA"]) # ABA MÃO DE OBRA
+    pyautogui.click(COORDINATES["TAB_MAO_DE_OBRA"]) # ABA MÃO DE OBRA
+    pyautogui.click(COORDINATES["TAB_MAO_DE_OBRA"]) # ABA MÃO DE OBRA
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((554, 379)) # CAIXA FORNECEDOR MAO DE OBRA
-    pyautogui.click((554, 379)) # CAIXA FORNECEDOR MAO DE OBRA
-    pyautogui.click((554, 379)) # CAIXA FORNECEDOR MAO DE OBRA
+    pyautogui.moveTo(COORDINATES["FORNECEDOR_MAO_OBRA"]) # CAIXA FORNECEDOR MAO DE OBRA
+    pyautogui.doubleClick(COORDINATES["FORNECEDOR_MAO_OBRA"]) # CAIXA FORNECEDOR MAO DE OBRA
+    pyautogui.click(COORDINATES["FORNECEDOR_MAO_OBRA"]) # CAIXA FORNECEDOR MAO DE OBRA
     print("FORNECEDOR - MAO DE OBRA: 1148218")
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.write('1148218'.upper(), interval=0.01)
     pyautogui.press('tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((930, 599)) # DISCRIMINAÇAO - INCLUIR
-    pyautogui.click((930, 599)) # DISCRIMINAÇAO - INCLUIR
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["DISCRIMINACAO_INCLUIR"]) # DISCRIMINAÇAO - INCLUIR
+    pyautogui.click(COORDINATES["DISCRIMINACAO_INCLUIR"]) # DISCRIMINAÇAO - INCLUIR
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("Categoria: Mao de Obra")
     pyautogui.write(('MAO DE OBRA').upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press(['tab', 'tab'])
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("Quantidade: 1")
     pyautogui.write('1'.upper(), interval=0.01)
     pyautogui.press('tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("Mao de Obra: ", row['Mao de Obra'])
     pyautogui.write(str(row['Mao de Obra']).replace('.', ',').upper())
     pyautogui.press('tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((930, 640)) # DISCRIMINAÇAO - ACEITAR
-    #pyautogui.doubleClick((930, 640)) # DISCRIMINAÇAO - ACEITAR
-    pyautogui.click((930, 640)) # DISCRIMINAÇAO - ACEITAR
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+    pyautogui.click(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.click((930, 640)) # DISCRIMINAÇAO - ACEITAR
-    #print("DISCRIMINAÇAO - ACEITAR")
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+    pyautogui.click(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+    time.sleep(0.25)
 
 # 9 - Discriminação Peças e Lubrificantes
 def produtos(row):
     print("____________________________________________________")
     check_pause() # Check if paused
-    pyautogui.doubleClick((424, 371)) # FORNECEDOR p PECAS e lubes
-    pyautogui.doubleClick((424, 371)) # FORNECEDOR p PECAS e lubes
-    time.sleep(0.5)
+    pyautogui.doubleClick(COORDINATES["FORNECEDOR_PECAS_LUBES"]) # FORNECEDOR p PECAS e lubes
+    pyautogui.doubleClick(COORDINATES["FORNECEDOR_PECAS_LUBES"]) # FORNECEDOR p PECAS e lubes
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("FORNECEDOR - PECAS E LUBES: 1148218")
     pyautogui.write('1148218'.upper())
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    #pyautogui.press('enter')
-    pyautogui.moveTo((930, 599)) # DISCRIMINAÇAO - INCLUIR
-    pyautogui.click((930, 599)) # DISCRIMINAÇAO - INCLUIR
-    pyautogui.click((930, 599)) # DISCRIMINAÇAO - INCLUIR
+    pyautogui.moveTo(COORDINATES["DISCRIMINACAO_INCLUIR"]) # DISCRIMINAÇAO - INCLUIR
+    pyautogui.click(COORDINATES["DISCRIMINACAO_INCLUIR"]) # DISCRIMINAÇAO - INCLUIR
+    pyautogui.click(COORDINATES["DISCRIMINACAO_INCLUIR"]) # DISCRIMINAÇAO - INCLUIR
     print("ITEM: ", row['Item'])
     check_pause() # Check if paused
     pyautogui.write(str(row['Item']).upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('tab')
     print("QUANTIDADE: ", row['Quantidade'])
@@ -144,7 +200,6 @@ def produtos(row):
     check_pause() # Check if paused
     print("VALOR UNIT: ", row['Valor Unit'])
     pyautogui.write(str(row['Valor Unit']).replace('.', ',').upper())
-    #pyautogui.write(f"{float(row['Valor Unit']):.2f}".replace('.', ','))
     pyautogui.press(['tab', 'tab'])
     check_pause() # Check if paused
     if str(row['Categoria Item']) == "PECAS":
@@ -163,32 +218,31 @@ def produtos(row):
         print("INSTALACAO: ", row['Mao de Obra'])
         mao_de_obra(row)
     else:
-        #sys.exit()
-        pyautogui.moveTo((930, 640)) # DISCRIMINAÇAO - ACEITAR
-        pyautogui.click((930, 640)) # DISCRIMINAÇAO - ACEITAR
-        pyautogui.click((930, 640)) # DISCRIMINAÇAO - ACEITAR
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+        pyautogui.click(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+        pyautogui.click(COORDINATES["DISCRIMINACAO_ACEITAR"]) # DISCRIMINAÇAO - ACEITAR
+        time.sleep(0.25)
 
 # 10 - Inclusão de Itens
 def include_item(row):
     print("____________________________________________________")
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((702, 726))  # INCLUIR ITEM
-    pyautogui.click((702, 726))  # INCLUIR ITEM
-    pyautogui.click((702, 726))  # INCLUIR ITEM
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["INCLUIR_ITEM"])  # INCLUIR ITEM
+    pyautogui.click(COORDINATES["INCLUIR_ITEM"])  # INCLUIR ITEM
+    pyautogui.click(COORDINATES["INCLUIR_ITEM"])  # INCLUIR ITEM
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press(['space', 'backspace'])
     print("Item: ", row['Item'])
     pyautogui.write(str(row['Item']).upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('tab')
-    pyautogui.moveTo((914, 718)) # DISCRIMINAR ITEM
+    pyautogui.moveTo(COORDINATES["DISCRIMINAR_ITEM"]) # DISCRIMINAR ITEM
     time.sleep(1)
     check_pause() # Check if paused
-    pyautogui.doubleClick((914, 718)) # DISCRIMINAR ITEM
+    pyautogui.doubleClick(COORDINATES["DISCRIMINAR_ITEM"]) # DISCRIMINAR ITEM
     time.sleep(1)
     check_pause() # Check if paused
     
@@ -201,58 +255,58 @@ def include_item(row):
     if tiposervico == 'MAO DE OBRA':
         mao_de_obra(row)
     elif tiposervico == 'PECAS':
-        time.sleep(0.5)
+        time.sleep(0.25)
         check_pause() # Check if paused
-        pyautogui.moveTo((435, 335)) # ABA PECAS
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["TAB_PECAS"]) # ABA PECAS
+        time.sleep(0.25)
         check_pause() # Check if paused
-        pyautogui.moveTo((435, 335)) # ABA PECAS
-        pyautogui.click((435, 335)) # ABA PECAS
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["TAB_PECAS"]) # ABA PECAS
+        pyautogui.click(COORDINATES["TAB_PECAS"]) # ABA PECAS
+        time.sleep(0.25)
         check_pause() # Check if paused
         produtos(row)
     elif tiposervico == 'LUBRIFICANTES':
-        time.sleep(0.5)
+        time.sleep(0.25)
         check_pause() # Check if paused
-        pyautogui.moveTo((518, 330)) # ABA LUBRIFICANTES
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["TAB_LUBRIFICANTES"]) # ABA LUBRIFICANTES
+        time.sleep(0.25)
         check_pause() # Check if paused
-        pyautogui.moveTo((518, 330)) # ABA LUBRIFICANTES
-        pyautogui.click((518, 330)) # ABA LUBRIFICANTES
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["TAB_LUBRIFICANTES"]) # ABA LUBRIFICANTES
+        pyautogui.click(COORDINATES["TAB_LUBRIFICANTES"]) # ABA LUBRIFICANTES
+        time.sleep(0.25)
         check_pause() # Check if paused
         produtos(row)
-        pyautogui.moveTo((930, 599))  # DISCRIMINAÇAO - INCLUIR
-        pyautogui.click((930, 599))  # DISCRIMINAÇAO - INCLUIR
-        time.sleep(0.5)
+        pyautogui.moveTo(COORDINATES["DISCRIMINACAO_INCLUIR"])  # DISCRIMINAÇAO - INCLUIR
+        pyautogui.click(COORDINATES["DISCRIMINACAO_INCLUIR"])  # DISCRIMINAÇAO - INCLUIR
+        time.sleep(0.25)
 
 # 11 - Dados OS
 def mains(row):
     print("____________________________________________________")
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((237, 238)) # NUMERO OS
-    pyautogui.doubleClick((237, 238)) # NUMERO OS
+    pyautogui.moveTo(COORDINATES["NUMERO_OS"]) # NUMERO OS
+    pyautogui.doubleClick(COORDINATES["NUMERO_OS"]) # NUMERO OS
     print("OS Sonner: ", row['IDX'])
     pyautogui.press('enter')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('enter')
-    pyautogui.moveTo((243, 334))  # ITEM DE FROTA
-    pyautogui.doubleClick((243, 334))  # ITEM DE FROTA
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["ITEM_FROTA"])  # ITEM DE FROTA
+    pyautogui.doubleClick(COORDINATES["ITEM_FROTA"])  # ITEM DE FROTA
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("Placa: ", row['Placa'])
     pyautogui.write(str(row['Placa']).upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press(['tab' ,'space', 'space'])
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.moveTo((499, 300)) # Seta Tipo
-    pyautogui.doubleClick((499, 300)) # Seta Tipo
-    pyautogui.doubleClick((499, 300)) # Seta Tipo
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["SETA_TIPO"]) # Seta Tipo
+    pyautogui.doubleClick(COORDINATES["SETA_TIPO"]) # Seta Tipo
+    pyautogui.doubleClick(COORDINATES["SETA_TIPO"]) # Seta Tipo
+    time.sleep(0.25)
     check_pause() # Check if paused
     tipo_serv_value = row["Tipo Serv"]
     if tipo_serv_value == "CORRETIVA":
@@ -267,73 +321,71 @@ def mains(row):
         print("Unknown")
         sys.exit()
 
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.click((771, 336))  # KM
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["KM"])  # KM
+    pyautogui.click(COORDINATES["KM"])  # KM
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.click((771, 336))  # KM
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["KM"])  # KM
+    pyautogui.click(COORDINATES["KM"])  # KM
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("KM: ", row['KM'])
-    pyautogui.write(str(row['KM']).upper(), interval=0.15)
-    time.sleep(0.5)
+    pyautogui.write(str(row['KM']).upper(), interval=0.01)
+    time.sleep(0.25)
     check_pause() # Check if paused
-    pyautogui.click((236, 441))  # Autorizador
-    pyautogui.click((236, 441))  # Autorizador
-    time.sleep(0.5)
+    pyautogui.moveTo(COORDINATES["AUTORIZADOR"])  # Autorizador
+    pyautogui.click(COORDINATES["AUTORIZADOR"])  # Autorizador
+    pyautogui.click(COORDINATES["AUTORIZADOR"])  # Autorizador
+    time.sleep(0.25)
     check_pause() # Check if paused
-    print("AUTORIZADOR: 138208272")
-    pyautogui.write('138208272'.upper(), interval=0.01)
-    time.sleep(0.5)
+    print("AUTORIZADOR: ", row['AUTORIZADOR'])
+    pyautogui.write(str(row['AUTORIZADOR']).upper(), interval=0.01)
+    time.sleep(0.25)
+    pyautogui.moveTo(COORDINATES["COMENTARIO"])  # Comentario
+    pyautogui.click(COORDINATES["COMENTARIO"])  # Comentario
+    pyautogui.click(COORDINATES["COMENTARIO"])  # Comentario
+    time.sleep(0.25)
+    check_pause() # Check if paused
+    print("Comentario: ", row['Comentario']) # Comentario
+    pyautogui.write(f"{str(row['Comentario'])}".upper(), interval=0.01) # Comentario
+    pyautogui.press('tab')
+    time.sleep(0.25)
+    check_pause() # Check if paused
+    pyautogui.moveTo(COORDINATES["ANO EMPENHO"])  # ANO EMPENHO
+    pyautogui.click(COORDINATES["ANO EMPENHO"])  # ANO EMPENHO
+    pyautogui.click(COORDINATES["ANO EMPENHO"])  # ANO EMPENHO
+    print("ANO DO EMPENHO: ", row['ANOEMPENHO'])
+    pyautogui.write(f"{str(row['ANOEMPENHO'])}".upper(), interval=0.01)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('tab')
-    time.sleep(0.5)
-    check_pause() # Check if paused
-    pyautogui.press('space')
-    time.sleep(0.5)
-    check_pause() # Check if paused
-    #pyautogui.write(str(row['Descrição']), interval=0.01)
-    pyautogui.press('tab')
-    time.sleep(0.5)
-    check_pause() # Check if paused
-    print("Comentario: ", row['Comentario'])
-    pyautogui.write(f"{str(row['Comentario'])}".upper(), interval=0.01)
-    #confirm()
-    pyautogui.press('tab')
-    time.sleep(0.5)
-    check_pause() # Check if paused
-    print("ANO DO EMPENHO: 2024")
-    pyautogui.write('2024'.upper(), interval=0.01)
-    time.sleep(0.5)
-    check_pause() # Check if paused
-    pyautogui.press('tab')
-    print("EMPENHO: 689")
-    pyautogui.write('689'.upper(), interval=0.01)
-    time.sleep(0.5)
+    print("EMPENHO: ", row['EMPENHO'])
+    pyautogui.write(f"{str(row['EMPENHO'])}".upper(), interval=0.01)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press(['tab', 'tab', 'tab', 'tab',])
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("NF: ", row['NF'])
     pyautogui.write(str(row['NF']).upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.write('1'.upper(), interval=0.01)
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press('tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     print("DATA NF: ", '{:0>8}'.format(row['DATANF']))
     pyautogui.write('{:0>8}'.format(row['DATANF']).upper(), interval=0.01)  # Type data nota fiscal with leading zero
-    time.sleep(0.5)
+    time.sleep(0.25)
     check_pause() # Check if paused
     pyautogui.press(['space', 'space', 'space'])
-    #confirm()
 
 
 def click_at_positions():
@@ -348,7 +400,7 @@ def click_at_positions():
         print("Exiting...")
         exit()
     pyautogui.hotkey('alt', 'tab')
-    time.sleep(0.5)
+    time.sleep(0.25)
 
     # Counter to track the index
     idx = manutencaoindex
@@ -365,7 +417,6 @@ def click_at_positions():
             prev_os = current_os
 
         include_item(row)
-        #confirm()
 
         # Save the current state
         save_manutencaoindex(idx)
@@ -378,12 +429,12 @@ def click_at_positions():
             next_os = next_row['OS']
             if next_os != current_os:
                 print("OS INCLUIDA")
-                pyautogui.click((221, 156))  # INCLUIR OS
-                pyautogui.click((221, 156))  # INCLUIR OS
+                pyautogui.moveTo(COORDINATES["INCLUIR_OS"])  # INCLUIR OS
+                pyautogui.click(COORDINATES["INCLUIR_OS"])  # INCLUIR OS
+                pyautogui.click(COORDINATES["INCLUIR_OS"])  # INCLUIR OS
                 pyautogui.press(['tab', 'space'])
                 print("____________________________________________________")
                 print("NOVA OS: ", next_os)
-                #confirm()
 
         idx += 1  # Move to the next row
         save_manutencaoindex(idx)
