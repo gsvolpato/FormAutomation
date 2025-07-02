@@ -86,7 +86,7 @@ def check_pause():
         time.sleep(0.1)
 
 # 2 - Load the Excel file into a DataFrame
-df = pd.read_excel('Manutencao\Filtered.xlsx')
+df = pd.read_excel('Filtered.xlsx')
 
 # 3 - Confirmation Breaks
 def confirm():
