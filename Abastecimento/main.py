@@ -108,6 +108,7 @@ def click_at_positions():
         
         check_pause()
         print("Registro: ", row['Registro'])
+        print("Condutor: ", row['Condutor'])
         pyautogui.write(str(int(row['Registro'])).zfill(6), interval=0.01)
         
         check_pause()
